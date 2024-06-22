@@ -1,25 +1,20 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect, useRef, useState } from 'react';
 
-function App() {
+import styles from "./App.module.css";
+import { Navbar } from './components/Navbar/Navbar';
+import { Banner } from './components/Banner/Banner';
+import gsap from 'gsap';
+import { useGSAP } from '@gsap/react';
+
+
+
+const App = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className={styles.App}>
+      <Navbar /> 
+      <Banner />
     </div>
   );
-}
+};
 
 export default App;
