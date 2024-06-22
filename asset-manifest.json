@@ -1,20 +1,22 @@
 {
   "files": {
-    "main.css": "/static/css/main.c49c7c3d.css",
-    "main.js": "/static/js/main.1e678572.js",
+    "main.css": "/static/css/main.f4e1a5f2.css",
+    "main.js": "/static/js/main.75be67a0.js",
     "static/js/453.253ccfac.chunk.js": "/static/js/453.253ccfac.chunk.js",
     "static/media/ship_image.png": "/static/media/ship_image.45a6a1292d3cad1ed717.png",
     "static/media/heroImage.png": "/static/media/heroImage.8c7bc5fa279d4678be56.png",
     "static/media/project.png": "/static/media/project.6b80dc22339b227d4ce7.png",
     "static/media/aboutImage.png": "/static/media/aboutImage.99c678ba43ec61a6d1d8.png",
     "static/media/isebatis-high-resolution-logo.png": "/static/media/isebatis-high-resolution-logo.7751cdf962674cca4cd0.png",
+    "static/media/LinkedIn_icon.svg.png": "/static/media/LinkedIn_icon.svg.f4a6a836338078bbd5ff.png",
+    "static/media/linkedin.svg": "/static/media/linkedin.fad6cb3b7ce0a6b6474fa2bc8ce52bc7.svg",
     "index.html": "/index.html",
-    "main.c49c7c3d.css.map": "/static/css/main.c49c7c3d.css.map",
-    "main.1e678572.js.map": "/static/js/main.1e678572.js.map",
+    "main.f4e1a5f2.css.map": "/static/css/main.f4e1a5f2.css.map",
+    "main.75be67a0.js.map": "/static/js/main.75be67a0.js.map",
     "453.253ccfac.chunk.js.map": "/static/js/453.253ccfac.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.c49c7c3d.css",
-    "static/js/main.1e678572.js"
+    "static/css/main.f4e1a5f2.css",
+    "static/js/main.75be67a0.js"
   ]
 }
