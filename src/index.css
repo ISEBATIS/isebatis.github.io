@@ -1,10 +1,8 @@
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-  font-family: "Outfit", Arial, Helvetica, sans-serif;
-}
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-html {
-  scroll-behavior: smooth;
+/* Ensure the background fills the entire page */
+html, body {
+  @apply bg-white dark:bg-neutral-950 text-gray-900 dark:text-neutral-100;
 }
