@@ -2,7 +2,21 @@ import React, { useEffect, useMemo, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { Download, Mail, Copy, Linkedin, Phone, MapPin, Filter, Search, ChevronDown, ExternalLink, BadgeCheck, Moon, Sun } from "lucide-react";
 import Hero from "./Hero";
+import Contact from "./Contact";
+import Projects from "./Projects";
+import TopBar from "./TopBar";
 
+// Portfolio.jsx (and wherever else)
+import {
+  PROFILE,
+  EXPERIENCES,
+  PROJECTS,
+  SKILLS,
+  CORE_SKILLS,
+  ACHIEVEMENTS,
+  EDUCATION,
+  LANGUAGES,
+} from "./Data";
 
 // ---- Theme hook (system-aware dark mode with toggle) ----
 function useTheme() {
@@ -46,6 +60,15 @@ const Button = ({ as: As = "button", className = "", children, ...props }) => (
   </As>
 );
 
+function ThemeToggle({ theme, onToggle }) {
+  return (
+    <Button className="bg-white border dark:bg-neutral-900 dark:border-neutral-800" onClick={onToggle} title="Toggle theme">
+      {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+      {theme === "dark" ? "Light" : "Dark"}
+    </Button>
+  );
+}
+
 const Tag = ({ active, onClick, children }) => (
   <button
     onClick={onClick}
@@ -69,167 +92,6 @@ const SectionTitle = ({ eyebrow, title, subtitle, className = "" }) => (
   </div>
 );
 
-// ---- Data ----
-const PROFILE = {
-  name: "Ilias Sebati",
-  title: "DevOps & Kubernetes Freelancer",
-  location: "Liège, Belgium",
-  email: "ilias.travail@outlook.be",
-  phone: "+32 466 40 44 37",
-  linkedin: "https://www.linkedin.com/in/ilias-sebati",
-  summary:
-    "Cloud/DevOps engineer helping teams ship faster and safer with Kubernetes, GitLab/Jenkins CI/CD, Terraform, and AWS. I build resilient platforms, streamline delivery, and automate everything end‑to‑end.",
-};
-
-const EXPERIENCES = [
-  {
-    company: "ARHS (part of Accenture)",
-    role: "Cloud Engineer (Consultant)",
-    period: "Sep 2023 – Present",
-    location: "Brussels, Belgium",
-    bullets: [
-      "Automated VM provisioning with Ansible; built CI/CD pipelines with Jenkins & GitLab CI.",
-      "Managed images & registries (Docker/Podman, Nexus, ECR, Harbor).",
-      "Migrated legacy apps to Kubernetes (EKS, MKS, Tanzu); implemented Mutating Webhooks & custom Operators (Java/Go).",
-      "Deployed Istio service mesh (mTLS, routing, observability) and used Gateway API; ingress via Istio and NGINX.",
-      "Infra-as-code with Terraform/CloudFormation; designed AWS/OVH landing zones; multi-env mgmt.",
-    ],
-    stack: [
-      "AWS",
-      "OVH",
-      "Terraform",
-      "CloudFormation",
-      "Kubernetes",
-      "Helm",
-      "EKS",
-      "MKS",
-      "Tanzu",
-      "Ansible",
-      "Jenkins",
-      "GitLab CI",
-      "GitLab Runners",
-      "Nexus",
-      "ECR",
-      "Harbor",
-      "Docker",
-      "Podman",
-      "Java",
-      "Go",
-      "Istio",
-      "Gateway API",
-      "Calico",
-      "Cilium",
-      "AWS VPC CNI",
-      "Confluence",
-      "Jira",
-    ],
-  },
-  {
-    company: "Cisco Systems (Master Thesis)",
-    role: "Cloud Engineer Intern",
-    period: "Oct 2022 – Jun 2023",
-    location: "Brussels, Belgium",
-    bullets: [
-      "Built a multi-cloud visibility & observability app with microservices.",
-      "Modeled AWS APIs/SDK data; computed cross-service reachability with networking/security understanding.",
-    ],
-    stack: ["AWS", "Networking", "Security", "Microservices"],
-  },
-  {
-    company: "Amazon Web Services (ProServe)",
-    role: "DevOps Intern",
-    period: "Jul 2022 – Sep 2022",
-    location: "Paris, France",
-    bullets: [
-      "Drafted a DevOps implementation guide aligned with AWS best practices.",
-      "PoC: Terraform through GitLab CI proving code‑centric infra delivery.",
-    ],
-    stack: ["AWS", "Terraform", "GitLab CI", "DevOps"],
-  },
-];
-
-const PROJECTS = [
-  {
-    id: "proj-a",
-    title: "Project A — EU App Modernization",
-    years: "2023–2024",
-    summary:
-      "Containerized legacy apps and migrated them onto managed Kubernetes (EKS/Tanzu). Automated delivery via GitLab CI and enforced policies using Kubernetes Mutating Webhooks.",
-    highlights: [
-      "Kubernetes migration (EKS/Tanzu)",
-      "GitLab CI multi-stage pipelines",
-      "Policy enforcement (Mutating Webhooks)",
-    ],
-    tags: ["Kubernetes", "DevOps", "Pipelines", "GitLab", "AWS"],
-    links: [],
-  },
-  {
-    id: "proj-b",
-    title: "Project B — Service Mesh & Ingress at Scale",
-    years: "2023–2024",
-    summary:
-      "Designed and rolled out an Istio service mesh with mutual TLS, traffic splitting, and observability. Adopted Gateway API; operated Istio & NGINX ingress for distinct workloads.",
-    highlights: [
-      "Istio rollout with mTLS",
-      "K8s Gateway API",
-      "Blue/green & canary routing",
-    ],
-    tags: ["Kubernetes", "Istio", "Platform", "Observability"],
-    links: [],
-  },
-];
-
-const SKILLS = [
-  { name: "Kubernetes", level: 90, tags: ["Kubernetes", "Platform"], years: 2 },
-  { name: "AWS", level: 85, tags: ["Cloud"], years: 3 },
-  { name: "Terraform", level: 85, tags: ["IaC", "Pipelines"], years: 3 },
-  { name: "GitLab CI", level: 80, tags: ["Pipelines", "GitLab"], years: 3 },
-  { name: "Jenkins", level: 75, tags: ["Pipelines"], years: 2 },
-  { name: "Istio", level: 80, tags: ["Kubernetes", "Mesh"], years: 2 },
-  { name: "Helm", level: 80, tags: ["Kubernetes"], years: 2 },
-  { name: "Ansible", level: 75, tags: ["Automation"], years: 2 },
-  { name: "Docker/Podman", level: 85, tags: ["Containers"], years: 4 },
-  { name: "Java", level: 65, tags: ["Languages"], years: 2 },
-  { name: "Go", level: 60, tags: ["Languages"], years: 1 },
-];
-
-const CORE_SKILLS = [
-  "Platform Engineering",
-  "SRE Mindset & Observability",
-  "CI/CD Design & Governance",
-  "Security by Default (mTLS, policies)",
-  "Cost‑aware Cloud Architectures",
-  "Documentation & Enablement",
-  "Agile ways of working",
-];
-
-const ACHIEVEMENTS = [
-  {
-    title: "Cyber Security Challenge Belgium — 2nd place (2023)",
-    link: "https://www.cybersecuritychallenge.be/",
-  },
-  { title: "Organizer — Google Developer Student Clubs (tech talks)" },
-];
-
-const EDUCATION = [
-  {
-    title: "MSc. in Computer Science (Networking/Security)",
-    org: "University of Liège",
-    period: "2021 – 2023",
-  },
-  {
-    title: "BSc. in Computer Science (Software Engineering)",
-    org: "University of Liège",
-    period: "2018 – 2021",
-  },
-];
-
-const LANGUAGES = [
-  { name: "French", level: "Native" },
-  { name: "English", level: "B2" },
-  { name: "Arabic", level: "A1" },
-];
-
 // ---- Helpers ----
 const copyToClipboard = async (text, setCopied) => {
   try {
@@ -249,42 +111,6 @@ const skillMatches = (skill, q, filters) => {
 
 const allSkillTags = Array.from(new Set(SKILLS.flatMap((s) => s.tags)));
 const allProjectTags = Array.from(new Set(PROJECTS.flatMap((p) => p.tags)));
-
-// ---- Components ----
-function ThemeToggle({ theme, onToggle }) {
-  return (
-    <Button className="bg-white border dark:bg-neutral-900 dark:border-neutral-800" onClick={onToggle} title="Toggle theme">
-      {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
-      {theme === "dark" ? "Light" : "Dark"}
-    </Button>
-  );
-}
-
-function TopBar({ cvBlobUrl, theme, onToggleTheme }) {
-  return (
-    <div className="fixed top-0 left-0 right-0 z-50 backdrop-blur supports-[backdrop-filter]:bg-white/60 bg-white/80 dark:supports-[backdrop-filter]:bg-neutral-900/60 dark:bg-neutral-900/80 border-b border-gray-100 dark:border-neutral-800">
-      <Container className="flex h-16 items-center justify-between">
-        <a href="#home" className="text-sm font-semibold">Ilias Sebati</a>
-        <div className="flex items-center gap-2">
-          <Button
-            as="a"
-            href={cvBlobUrl}
-            download
-            className="bg-black text-white dark:bg-white dark:text-black"
-            title="Download my CV"
-          >
-            <Download className="h-4 w-4" /> Get my CV
-          </Button>
-          {/* Removed Upload CV per request */}
-          <Button as="a" href={PROFILE.linkedin} target="_blank" rel="noreferrer" className="bg-white border dark:bg-neutral-900 dark:border-neutral-800">
-            <Linkedin className="h-4 w-4" /> LinkedIn
-          </Button>
-          <ThemeToggle theme={theme} onToggle={onToggleTheme} />
-        </div>
-      </Container>
-    </div>
-  );
-}
 
 function About() {
   return (
@@ -352,99 +178,6 @@ function Experience() {
   );
 }
 
-function Projects() {
-  const [query, setQuery] = useState("");
-  const [filters, setFilters] = useState(new Set());
-  const [sort, setSort] = useState("year-desc");
-
-  const toggle = (t) => {
-    const next = new Set(filters);
-    next.has(t) ? next.delete(t) : next.add(t);
-    setFilters(next);
-  };
-
-  const filtered = useMemo(() => {
-    const q = query.trim().toLowerCase();
-    let list = PROJECTS.filter((p) => {
-      const matchesQuery = !q || p.title.toLowerCase().includes(q) || p.summary.toLowerCase().includes(q);
-      const matchesFilter = filters.size === 0 || p.tags.some((t) => filters.has(t));
-      return matchesQuery && matchesFilter;
-    });
-    if (sort === "year-desc") list.sort((a, b) => b.years.localeCompare(a.years));
-    if (sort === "year-asc") list.sort((a, b) => a.years.localeCompare(b.years));
-    if (sort === "title") list.sort((a, b) => a.title.localeCompare(b.title));
-    return list;
-  }, [query, filters, sort]);
-
-  return (
-    <section id="projects" className="py-16 md:py-24">
-      <Container>
-        <SectionTitle eyebrow="Projects" title="Selected work" subtitle="Filter by tags, sort, or search to explore." />
-        <div className="flex flex-wrap items-center gap-2 mb-4">
-          <div className="relative flex-1 min-w-[240px]">
-            <Search className="absolute left-3 top-2.5 h-4 w-4 text-gray-400" />
-            <input
-              type="text"
-              placeholder="Search projects…"
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-              className="w-full rounded-2xl border px-9 py-2 text-sm outline-none focus:ring-2 bg-white dark:bg-neutral-900 dark:border-neutral-800"
-            />
-          </div>
-          <div className="flex items-center gap-2">
-            <Filter className="h-4 w-4 text-gray-400" />
-            <select value={sort} onChange={(e) => setSort(e.target.value)} className="rounded-2xl border px-3 py-2 text-sm bg-white dark:bg-neutral-900 dark:border-neutral-800">
-              <option value="year-desc">Newest</option>
-              <option value="year-asc">Oldest</option>
-              <option value="title">Title A→Z</option>
-            </select>
-          </div>
-        </div>
-        <div className="flex flex-wrap gap-2 mb-6">
-          {allProjectTags.map((t) => (
-            <Tag key={t} active={filters.has(t)} onClick={() => toggle(t)}>{t}</Tag>
-          ))}
-          {filters.size > 0 && (
-            <button onClick={() => setFilters(new Set())} className="text-xs text-gray-600 dark:text-neutral-300 underline">Clear</button>
-          )}
-        </div>
-
-        <div className="grid md:grid-cols-2 gap-6">
-          {filtered.map((p) => (
-            <motion.div key={p.id} initial={{ opacity: 0, y: 12 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="rounded-2xl border bg-white dark:bg-neutral-900 dark:border-neutral-800 p-6 shadow-sm">
-              <div className="flex items-start justify-between gap-4">
-                <div>
-                  <h3 className="font-semibold text-lg">{p.title}</h3>
-                  <div className="text-sm text-gray-600 dark:text-neutral-300">{p.years}</div>
-                </div>
-                <div className="flex flex-wrap gap-2 justify-end">
-                  {p.tags.map((t) => (
-                    <span key={t} className="rounded-full border px-2 py-1 text-xs text-gray-700 dark:text-neutral-300 dark:border-neutral-800">{t}</span>
-                  ))}
-                </div>
-              </div>
-              <p className="mt-3 text-sm text-gray-700 dark:text-neutral-300">{p.summary}</p>
-              <ul className="mt-3 grid gap-2 text-sm text-gray-700 dark:text-neutral-300 list-disc list-inside">
-                {p.highlights.map((h) => (
-                  <li key={h}>{h}</li>
-                ))}
-              </ul>
-              {p.links?.length ? (
-                <div className="mt-4 flex gap-2">
-                  {p.links.map((l) => (
-                    <a key={l.href} href={l.href} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 text-sm text-gray-700 dark:text-neutral-300 hover:underline">
-                      {l.label} <ExternalLink className="h-3.5 w-3.5" />
-                    </a>
-                  ))}
-                </div>
-              ) : null}
-            </motion.div>
-          ))}
-        </div>
-      </Container>
-    </section>
-  );
-}
 
 function Skills() {
   const [q, setQ] = useState("");
@@ -548,45 +281,6 @@ function Accents() {
   );
 }
 
-function Contact({ cvBlobUrl }) {
-  const [copied, setCopied] = useState(false);
-  return (
-    <section id="contact" className="py-16 md:py-24 bg-gradient-to-b from-white to-sky-50 dark:from-neutral-950 dark:to-neutral-900">
-      <Container>
-        <SectionTitle eyebrow="Contact" title="Let’s build something great" subtitle="Tell me about your goals — I’ll reply within 1 business day." />
-        <div className="grid md:grid-cols-3 gap-6">
-          <div className="md:col-span-2 rounded-2xl border bg-white dark:bg-neutral-900 dark:border-neutral-800 p-6 shadow-sm">
-            <form onSubmit={(e) => e.preventDefault()} className="grid gap-4">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <input required placeholder="Your name" className="rounded-2xl border px-3 py-2 text-sm bg-white dark:bg-neutral-900 dark:border-neutral-800" />
-                <input required type="email" placeholder="Your email" className="rounded-2xl border px-3 py-2 text-sm bg-white dark:bg-neutral-900 dark:border-neutral-800" />
-              </div>
-              <input placeholder="Company (optional)" className="rounded-2xl border px-3 py-2 text-sm bg-white dark:bg-neutral-900 dark:border-neutral-800" />
-              <textarea required placeholder="Project details" rows={5} className="rounded-2xl border px-3 py-2 text-sm bg-white dark:bg-neutral-900 dark:border-neutral-800" />
-              <div className="flex items-center gap-2">
-                <Button className="bg-black text-white dark:bg-white dark:text-black">Send message</Button>
-                <Button as="a" href={cvBlobUrl} download className="bg-white border dark:bg-neutral-900 dark:border-neutral-800"><Download className="h-4 w-4" /> Get my CV</Button>
-              </div>
-              <p className="text-xs text-gray-500 dark:text-neutral-400">*This demo form does not submit; wire it to your endpoint or a service like Formspree.</p>
-            </form>
-          </div>
-          <div className="rounded-2xl border bg-white dark:bg-neutral-900 dark:border-neutral-800 p-6 shadow-sm">
-            <div className="space-y-4 text-sm">
-              <div className="flex items-center gap-2"><Mail className="h-4 w-4" /> {PROFILE.email}</div>
-              <div className="flex items-center gap-2"><Phone className="h-4 w-4" /> {PROFILE.phone}</div>
-              <div className="flex items-center gap-2"><MapPin className="h-4 w-4" /> {PROFILE.location}</div>
-              <a href={PROFILE.linkedin} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 hover:underline"><Linkedin className="h-4 w-4" /> LinkedIn</a>
-              <Button className="bg-white border dark:bg-neutral-900 dark:border-neutral-800" onClick={() => copyToClipboard(PROFILE.email, setCopied)}>
-                <Copy className="h-4 w-4" /> {copied ? "Copied!" : "Copy email"}
-              </Button>
-            </div>
-          </div>
-        </div>
-      </Container>
-    </section>
-  );
-}
-
 export default function Portfolio() {
   const [cvBlobUrl, setCvBlobUrl] = useState(null);
   const initialisedRef = useRef(false);
@@ -615,8 +309,8 @@ Email: ${PROFILE.email} — LinkedIn: ${PROFILE.linkedin}`,
 
   return (
     <div className="min-h-screen bg-white text-gray-900 dark:bg-neutral-950 dark:text-neutral-100">
-      <TopBar cvBlobUrl={cvBlobUrl ?? undefined} theme={theme} onToggleTheme={toggleTheme} />
-      <main className="pt-16">
+        <TopBar cvBlobUrl={cvBlobUrl ?? undefined} theme={theme} onToggleTheme={toggleTheme} PROFILE={PROFILE} Container={Container} ThemeToggle={ThemeToggle} Button={Button} />
+        <main className="pt-16">
         <Hero
         onHireClick={onHireClick}
         PROFILE={PROFILE}
@@ -627,10 +321,17 @@ Email: ${PROFILE.email} — LinkedIn: ${PROFILE.linkedin}`,
         />
         <About />
         <Experience />
-        <Projects />
+        <Projects PROJECTS={PROJECTS} allProjectTags={allProjectTags} Container={Container} SectionTitle={SectionTitle} Tag={Tag} />
         <Skills />
         <Accents />
-        <Contact cvBlobUrl={cvBlobUrl ?? undefined} />
+        <Contact
+          cvBlobUrl={cvBlobUrl ?? undefined}
+          PROFILE={PROFILE}
+          Container={Container}
+          SectionTitle={SectionTitle}
+          Button={Button}
+          copyToClipboard={copyToClipboard}
+        />
       </main>
       <footer className="border-t border-gray-100 dark:border-neutral-800">
         <Container>

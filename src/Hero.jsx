@@ -1,4 +1,3 @@
-// src/Hero.jsx
 import React, { useMemo, useState } from "react";
 import { motion } from "framer-motion";
 import { Mail, Phone, MapPin, ChevronDown, BadgeCheck, Linkedin } from "lucide-react";
@@ -12,29 +11,27 @@ export default function Hero({
   SectionTitle,
 }) {
   const [copied, setCopied] = useState(false);
+  const [phoneCopied, setPhoneCopied] = useState(false);
 
-  // Years of experience: start Sept 2023, always round up
   const yearsOfExp = useMemo(() => {
-    const start = new Date(2023, 8, 1); // Sept = 8 (0-indexed)
+    const start = new Date(2023, 8, 1);
     const now = new Date();
     const years = (now - start) / (1000 * 60 * 60 * 24 * 365.25);
     return Math.ceil(years);
   }, []);
 
-  const copyToClipboard = async (text) => {
+  const copyToClipboard = async (text, setState) => {
     try {
       await navigator.clipboard.writeText(text);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 1500);
+      setState(true);
+      setTimeout(() => setState(false), 1500);
     } catch {}
   };
 
   return (
     <section id="home" className="relative min-h-screen w-full flex items-center">
-      {/* Background gradient behind content */}
       <div className="absolute inset-0 -z-10 bg-gradient-to-br from-sky-50 via-white to-purple-50 dark:from-neutral-950 dark:via-neutral-950 dark:to-neutral-900" />
 
-      {/* Experience badge (top-right) */}
       <div className="absolute top-4 right-4 bg-black text-white dark:bg-white dark:text-black rounded-full px-4 py-1 text-sm font-semibold shadow">
         {yearsOfExp}+ years of experience
       </div>
@@ -67,7 +64,7 @@ export default function Hero({
               </Button>
               <Button
                 className="bg-white border dark:bg-neutral-900 dark:border-neutral-800"
-                onClick={() => copyToClipboard(PROFILE.email)}
+                onClick={() => copyToClipboard(PROFILE.email, setCopied)}
               >
                 <Mail className="h-4 w-4" /> {copied ? "Copied!" : "Copy email"}
               </Button>
@@ -77,9 +74,12 @@ export default function Hero({
               <span className="inline-flex items-center gap-2">
                 <MapPin className="h-4 w-4" /> {PROFILE.location}
               </span>
-              <a className="inline-flex items-center gap-2 hover:underline" href={`tel:${PROFILE.phone.replaceAll(" ", "")}`}>
-                <Phone className="h-4 w-4" /> {PROFILE.phone}
-              </a>
+              <button
+                className="inline-flex items-center gap-2 hover:underline"
+                onClick={() => copyToClipboard(PROFILE.phone, setPhoneCopied)}
+              >
+                <Phone className="h-4 w-4" /> {phoneCopied ? "Copied!" : PROFILE.phone}
+              </button>
               <a className="inline-flex items-center gap-2 hover:underline" href={PROFILE.linkedin} target="_blank" rel="noreferrer">
                 <Linkedin className="h-4 w-4" /> LinkedIn
               </a>
